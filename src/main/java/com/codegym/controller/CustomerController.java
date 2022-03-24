@@ -34,7 +34,8 @@ public class CustomerController {
 
     @PostMapping ("/customers/create")
     public ModelAndView saveCustomer (@ModelAttribute Customer customer){
-        customerService.save(customer);
+//        customerService.save(customer);
+        customerService.insertWithStoredProcedure(customer);
         ModelAndView modelAndView = new ModelAndView("/customer/create");
         modelAndView.addObject("customer", new Customer());//sau mỗi lần submit sẽ xóa trắng form
         modelAndView.addObject("message", "New customer created successfully");

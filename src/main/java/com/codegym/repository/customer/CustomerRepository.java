@@ -3,10 +3,7 @@ package com.codegym.repository.customer;
 import com.codegym.model.Customer;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -48,5 +45,14 @@ public class CustomerRepository implements ICustomerRepository {
         if (customer != null) {
             em.remove(customer);
         }
+    }
+
+    @Override
+    public boolean insertWithStoredProcedure(Customer customer) {
+        String sql = "CALL Insert_Customer(:firstName, :lastName)";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("firstName", customer.getFirstName());
+        query.setParameter("lastName", customer.getLastName());
+        return query.executeUpdate() == 0;
     }
 }
